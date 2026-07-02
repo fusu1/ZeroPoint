@@ -1,0 +1,37 @@
+# Unreal Engine generated folders
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+
+# Unreal Engine local developer content
+/Content/Developers/
+
+# Visual Studio
+/.vs/
+.vsconfig
+*.VC.db
+*.VC.opendb
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.tmp
+*.slnx
+
+# JetBrains Rider / IntelliJ
+/.idea/
+
+# VS Code
+/.vscode/
+
+# OS-generated files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# Plugin generated folders
+**/Binaries/
+**/Intermediate/
