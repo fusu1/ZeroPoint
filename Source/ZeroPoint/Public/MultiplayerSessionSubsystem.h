@@ -8,7 +8,7 @@
 #include "MultiplayerSessionSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnCreateSessionCompleteDelegate, bool, bWasSuccessful);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMultiplayerOnDestroySessionCompleteDelegate, bool, bWasSuccessful);
 /**
  * 
  */
@@ -20,11 +20,14 @@ public:
 	UMultiplayerSessionSubsystem();
 	
 	void CreateSession(int32 NumPublicConnections, FString MatchType);
+	void DestroySession();
 	
 	FMultiplayerOnCreateSessionCompleteDelegate MultiplayerOnCreateSessionCompleteDelegate;
+	FMultiplayerOnDestroySessionCompleteDelegate MultiplayerOnDestroySessionCompleteDelegate;
 	
 protected:
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	
 private:
 	IOnlineSessionPtr SessionInterface;
@@ -33,4 +36,11 @@ private:
 	
 	FOnCreateSessionCompleteDelegate CreateSessionCompleteDelegate;
 	FDelegateHandle CreateSessionCompleteDelegateHandle;
+	
+	FOnDestroySessionCompleteDelegate DestroySessionCompleteDelegate;
+	FDelegateHandle DestroySessionCompleteDelegateHandle;
+	
+	int32 DesiredNumPublicConnections;
+	FString DesiredMatchType;
+	bool bCreateSessionOnDestroy = false;
 };
