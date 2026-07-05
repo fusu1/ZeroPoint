@@ -25,6 +25,12 @@
 # VS Code
 /.vscode/
 
+# Local AI / MCP client settings
+/.codex/
+/.cursor/
+/.gemini/
+/.mcp.json
+
 # OS-generated files
 Thumbs.db
 .DS_Store
