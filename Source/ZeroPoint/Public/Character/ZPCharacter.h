@@ -30,4 +30,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComponent;
 	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> ArmSkeletalMeshComponent;
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> WeaponComponent;
+	
 };

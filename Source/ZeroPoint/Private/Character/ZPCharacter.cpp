@@ -4,6 +4,7 @@
 #include "Character/ZPCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 
 AZPCharacter::AZPCharacter()
 {
@@ -12,8 +13,20 @@ AZPCharacter::AZPCharacter()
 	/*
 	 * Components
 	 */
+	GetMesh()->SetOwnerNoSee(true);
+	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(RootComponent);
+	
+	ArmSkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("ArmSkeletalMesh"));
+	ArmSkeletalMeshComponent->SetupAttachment(CameraComponent);
+	ArmSkeletalMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ArmSkeletalMeshComponent->SetOnlyOwnerSee(true);
+	
+	WeaponComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
+	WeaponComponent->SetupAttachment(ArmSkeletalMeshComponent, FName("WeaponSocket"));
+	WeaponComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	WeaponComponent->SetOnlyOwnerSee(true);
 }
 
 void AZPCharacter::BeginPlay()
