@@ -3,8 +3,11 @@
 
 #include "Character/ZPCharacter.h"
 
+#include "AbilitySystem/ZPAbilitySystemComponent.h"
+#include "AbilitySystem/ZPAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Player/ZPPlayerState.h"
 
 AZPCharacter::AZPCharacter()
 {
@@ -35,6 +38,27 @@ void AZPCharacter::BeginPlay()
 	
 }
 
+void AZPCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	InitAbilityActorInfo();
+}
+
+void AZPCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	InitAbilityActorInfo();
+}
+
+void AZPCharacter::InitAbilityActorInfo()
+{
+	AZPPlayerState* ZPPlayerState = CastChecked<AZPPlayerState>(GetPlayerState());
+	AbilitySystemComponent = CastChecked<UZPAbilitySystemComponent>(ZPPlayerState->GetAbilitySystemComponent());
+	AttributeSet = ZPPlayerState->GetAttributeSet();
+	AbilitySystemComponent->InitAbilityActorInfo(ZPPlayerState, this);
+}
+
 void AZPCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -46,4 +70,15 @@ void AZPCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+UAbilitySystemComponent* AZPCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+UZPAttributeSet* AZPCharacter::GetAttributeSet() const
+{
+	return AttributeSet;
+}
+
 

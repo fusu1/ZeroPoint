@@ -3,26 +3,42 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "ZPCharacter.generated.h"
 
+class UZPAttributeSet;
+class UZPAbilitySystemComponent;
 class UCameraComponent;
 
 UCLASS()
-class ZEROPOINT_API AZPCharacter : public ACharacter
+class ZEROPOINT_API AZPCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	AZPCharacter();
-	
 	virtual void Tick(float DeltaTime) override;
-	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UZPAttributeSet* GetAttributeSet() const;
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 
+	/*
+	 * GAS
+	 */
+	UPROPERTY()
+	TObjectPtr<UZPAbilitySystemComponent> AbilitySystemComponent;
+	
+	UPROPERTY()
+	TObjectPtr<UZPAttributeSet> AttributeSet;
+	
+	void InitAbilityActorInfo();
 private:
 	/*
 	 * Components
