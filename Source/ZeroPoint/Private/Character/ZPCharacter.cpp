@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Player/ZPPlayerState.h"
+#include "GameplayEffect.h"
 
 AZPCharacter::AZPCharacter()
 {
@@ -43,6 +44,7 @@ void AZPCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	
 	InitAbilityActorInfo();
+	InitializeDefaultAttributes();
 }
 
 void AZPCharacter::OnRep_PlayerState()
@@ -57,6 +59,20 @@ void AZPCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent = CastChecked<UZPAbilitySystemComponent>(ZPPlayerState->GetAbilitySystemComponent());
 	AttributeSet = ZPPlayerState->GetAttributeSet();
 	AbilitySystemComponent->InitAbilityActorInfo(ZPPlayerState, this);
+}
+
+void AZPCharacter::InitializeDefaultAttributes() const
+{
+	check(AbilitySystemComponent);
+	check(DefaultAttributeEffect);
+	
+	FGameplayEffectContextHandle ContextHandle = AbilitySystemComponent->MakeEffectContext();
+	ContextHandle.AddSourceObject(this);
+	FGameplayEffectSpecHandle EffectSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(DefaultAttributeEffect, 1.f, ContextHandle);
+	if (EffectSpecHandle.IsValid())
+	{
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	}
 }
 
 void AZPCharacter::Tick(float DeltaTime)

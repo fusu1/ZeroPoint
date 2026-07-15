@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "ZPCharacter.generated.h"
 
+class UGameplayEffect;
 class UZPAttributeSet;
 class UZPAbilitySystemComponent;
 class UCameraComponent;
@@ -39,6 +40,7 @@ protected:
 	TObjectPtr<UZPAttributeSet> AttributeSet;
 	
 	void InitAbilityActorInfo();
+	void InitializeDefaultAttributes() const;
 private:
 	/*
 	 * Components
@@ -51,5 +53,8 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USkeletalMeshComponent> WeaponComponent;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Attribute")
+	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
 	
 };

@@ -8,8 +8,7 @@
 
 AZPPlayerState::AZPPlayerState()
 {
-	NetUpdateFrequency = 100.f;
-	
+	SetNetUpdateFrequency(100.f);
 	/*
 	 * Ability System Component
 	 */
