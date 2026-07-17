@@ -11,7 +11,8 @@
 			"AdditionalDependencies": [
 				"Engine",
 				"UMG",
-				"GameplayAbilities"
+				"GameplayAbilities",
+				"CoreUObject"
 			]
 		}
 	],
@@ -45,6 +46,10 @@
 		},
 		{
 			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "EditorToolset",
 			"Enabled": true
 		}
 	]

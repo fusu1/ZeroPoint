@@ -41,6 +41,7 @@ protected:
 	
 	void InitAbilityActorInfo();
 	void InitializeDefaultAttributes() const;
+	void InitHUD();
 private:
 	/*
 	 * Components

@@ -9,6 +9,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Player/ZPPlayerState.h"
 #include "GameplayEffect.h"
+#include "Player/ZPPlayerController.h"
+#include "UI/HUD/ZPHUD.h"
 
 AZPCharacter::AZPCharacter()
 {
@@ -45,12 +47,14 @@ void AZPCharacter::PossessedBy(AController* NewController)
 	
 	InitAbilityActorInfo();
 	InitializeDefaultAttributes();
+	InitHUD();
 }
 
 void AZPCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 	InitAbilityActorInfo();
+	InitHUD();
 }
 
 void AZPCharacter::InitAbilityActorInfo()
@@ -72,6 +76,20 @@ void AZPCharacter::InitializeDefaultAttributes() const
 	if (EffectSpecHandle.IsValid())
 	{
 		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	}
+}
+
+void AZPCharacter::InitHUD()
+{
+	AZPPlayerState* ZPPlayerState = Cast<AZPPlayerState>(GetPlayerState());
+	AZPPlayerController* ZPPlayerController = Cast<AZPPlayerController>(Controller);
+	if (ZPPlayerController && ZPPlayerState)
+	{
+		AZPHUD* ZPHUD = Cast<AZPHUD>(ZPPlayerController->GetHUD());
+		if (ZPHUD)
+		{
+			ZPHUD->InitOverlay(ZPPlayerController, ZPPlayerState, GetAbilitySystemComponent(), GetAttributeSet());
+		}
 	}
 }
 
