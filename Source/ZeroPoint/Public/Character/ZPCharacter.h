@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "ZPCharacter.generated.h"
 
+class UGameplayAbility;
 class UGameplayEffect;
 class UZPAttributeSet;
 class UZPAbilitySystemComponent;
@@ -24,7 +25,7 @@ public:
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UZPAttributeSet* GetAttributeSet() const;
-
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
@@ -42,6 +43,7 @@ protected:
 	void InitAbilityActorInfo();
 	void InitializeDefaultAttributes() const;
 	void InitHUD();
+	void AddCharacterStartupAbilities();
 private:
 	/*
 	 * Components
@@ -58,4 +60,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category="Attribute")
 	TSubclassOf<UGameplayEffect> DefaultAttributeEffect;
 	
+	/*
+	 * Abilities
+	 */
+	UPROPERTY(EditDefaultsOnly, Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

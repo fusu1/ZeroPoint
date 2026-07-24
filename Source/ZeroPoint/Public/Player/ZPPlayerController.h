@@ -6,6 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "ZPPlayerController.generated.h"
 
+class UZPAbilitySystemComponent;
+struct FGameplayTag;
+class UZPInputConfig;
 struct FInputActionValue;
 class UInputAction;
 class UInputMappingContext;
@@ -26,18 +29,34 @@ protected:
 	
 private:
 	
+	UPROPERTY()
+	TObjectPtr<UZPAbilitySystemComponent> ZPAbilitySystemComponent;
+	
+	UZPAbilitySystemComponent* GetZPAbilitySystemComponent();
+	
 	/*
 	 * Enhanced Input
 	 */
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> LookAction;
 	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	
+	/*
+	 * Ability Input
+	 */
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UZPInputConfig> AbilityInputConfig;
+	
+	void AbilityInputPressed(FGameplayTag InputTag);
+	void AbilityInputReleased(FGameplayTag InputTag);
+	void AbilityInputHeld(FGameplayTag InputTag);
+	
 };

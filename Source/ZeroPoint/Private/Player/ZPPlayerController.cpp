@@ -5,8 +5,12 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AbilitySystem/ZPAbilitySystemComponent.h"
+#include "Engine/Engine.h"
 #include "Engine/LocalPlayer.h"
 #include "GameFramework/Pawn.h"
+#include "Input/ZPInputComponent.h"
+#include "Player/ZPPlayerState.h"
 
 void AZPPlayerController::BeginPlay()
 {
@@ -23,9 +27,32 @@ void AZPPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 	
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
-	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+	UZPInputComponent* ZPInputComponent = CastChecked<UZPInputComponent>(InputComponent);
+	ZPInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Move);
+	ZPInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
+	ZPInputComponent->BindAbilityActions(AbilityInputConfig, this, &ThisClass::AbilityInputPressed, &ThisClass::AbilityInputReleased, &ThisClass::AbilityInputHeld);
+}
+
+UZPAbilitySystemComponent* AZPPlayerController::GetZPAbilitySystemComponent()
+{
+	if (!ZPAbilitySystemComponent)
+	{
+		AZPPlayerState* ZPPlayerState = GetPlayerState<AZPPlayerState>();
+		if (ZPPlayerState)
+		{
+			UZPAbilitySystemComponent* ZPASC = Cast<UZPAbilitySystemComponent>(ZPPlayerState->GetAbilitySystemComponent());
+			if (ZPASC)
+			{
+				ZPAbilitySystemComponent = ZPASC;
+				return ZPAbilitySystemComponent;
+			}
+		}
+	}
+	else
+	{
+		return ZPAbilitySystemComponent;
+	}
+	return nullptr;
 }
 
 void AZPPlayerController::Move(const FInputActionValue& Value)
@@ -50,4 +77,31 @@ void AZPPlayerController::Look(const FInputActionValue& Value)
 	
 	AddYawInput(LookAxisVector.X);
 	AddPitchInput(LookAxisVector.Y);
+}
+
+void AZPPlayerController::AbilityInputPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString("Pressed"));
+	
+	if (GetZPAbilitySystemComponent() == nullptr) return;
+	
+	ZPAbilitySystemComponent->AbilityInputTagPressed(InputTag);
+}
+
+void AZPPlayerController::AbilityInputReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString("Released"));
+	
+	if (GetZPAbilitySystemComponent() == nullptr) return;
+	
+	ZPAbilitySystemComponent->AbilityInputTagReleased(InputTag);
+}
+
+void AZPPlayerController::AbilityInputHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString("Held"));
+	
+	if (GetZPAbilitySystemComponent() == nullptr) return;
+	
+	ZPAbilitySystemComponent->AbilityInputTagHeld(InputTag);
 }

@@ -5,4 +5,5 @@
 namespace ZPGameplayTags
 {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Jump)
+	
 }

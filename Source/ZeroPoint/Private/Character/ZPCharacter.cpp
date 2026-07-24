@@ -48,6 +48,7 @@ void AZPCharacter::PossessedBy(AController* NewController)
 	InitAbilityActorInfo();
 	InitializeDefaultAttributes();
 	InitHUD();
+	AddCharacterStartupAbilities();
 }
 
 void AZPCharacter::OnRep_PlayerState()
@@ -90,6 +91,15 @@ void AZPCharacter::InitHUD()
 		{
 			ZPHUD->InitOverlay(ZPPlayerController, ZPPlayerState, GetAbilitySystemComponent(), GetAttributeSet());
 		}
+	}
+}
+
+void AZPCharacter::AddCharacterStartupAbilities()
+{
+	UZPAbilitySystemComponent* ZPAbilitySystemComponent = Cast<UZPAbilitySystemComponent>(GetAbilitySystemComponent());
+	if (ZPAbilitySystemComponent)
+	{
+		ZPAbilitySystemComponent->AddCharacterAbilities(StartupAbilities);
 	}
 }
 
